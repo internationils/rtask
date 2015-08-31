@@ -2,4 +2,10 @@
 // CHANGELOG.txt for rtask
 //--------------------------------------------------------------
 
-2015-08 grammar working, selftest working, first github push
+2015-08-31
+- sort the keys in the self test debug output
+
+2015-08
+- grammar working, selftest working, first github push
+- separation of rtask into a module and a selftest
+- rework of grammar to be simpler and more flexible

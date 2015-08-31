@@ -1,0 +1,21 @@
+//--------------------------------------------------------------
+// TODO.txt for rtask
+//--------------------------------------------------------------
+
+// IMMEDIATE
+- add shell Term::Shell / Term::ReadLine::Gnu
+
+
+// SOON
+- Change the grammar to not allow text tags text
+- add configuration file reading and processing Config::IniFiles
+- add \include statements to read taskfiles from within other task files
+- prevent taskfile recursion from \include (a reads b reads a reads ...)
+- enable logging via log4perl
+
+
+// FUTURE
+- use Date::Extract to intelligently parse dates?
+- look at remind https://www.roaringpenguin.com/wiki/index.php/Remind
+- look at http://todotxt.com/
+

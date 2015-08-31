@@ -99,7 +99,7 @@ sub test_tags {
     plan tests => 1;
 
     $input = qq(+testprojectA \@testlocationB #testtagC.line !testprioD &testtypeE +proj2 \@location2 #tag2 !prio2 &type2 tasktext);
-    $output = qq(1: text tags \(with 10 tags\)
+    $output = qq(1: tags text \(with 10 tags\)
             text: tasktext
             PROJ: +testprojectA +proj2
             TAGS: #testtagC.line #tag2
@@ -145,7 +145,7 @@ sub test_quotes {
     parse_and_compare($g, $input, $output, "Full line quoted");
 
     $input = qq(#a_tag "line with more quoted text" #another_tag // and a comment);
-    $output = qq(1: qtext comment tags (with 2 tags)
+    $output = qq(1: comment qtext tags (with 2 tags)
             qtext: "line with more quoted text"
             comment: // and a comment
 TAGS: #a_tag #another_tag);
@@ -173,7 +173,7 @@ sub test_continuation {
     parse_and_compare($g, $input, $output, "Simple continued text across 2 lines");
 
     $input = qq(#tags #more_tags.line \\\n#and_even_more.line with a blank line next);
-    $output = qq(1: text tags (with 3 tags)
+    $output = qq(1: tags text (with 3 tags)
             text: with a blank line next
             TAGS: #tags #more_tags.line #and_even_more.line);
     parse_and_compare($g, $input, $output, "Continued text across 2 lines with tags");
@@ -187,7 +187,7 @@ sub test_grammar {
     plan tests => 1;
 
     $input = qq(TODO: failline with a #tag_in_the_middle and more task text that shouldn't be in line);
-    $output = qq(1: text tags \(with 1 tags\)
+    $output = qq(1: tags text \(with 1 tags\)
             text: failline with a and more task text that shouldn't be in line
             TAGS: #tag_in_the_middle);
     parse_and_compare_false($g, $input, $output, "TODO: A line with a #tag in the middle that should fail");
@@ -231,29 +231,28 @@ sub print_tasklist {
     {
 #my $line = sprintf ("%3d",$titem->{'inputline'});
         my $line = sprintf ("%d",$titem->{'inputline'});
-        my $spaces = "";
-        my $tags =  join(" ", keys $titem);
+        my $tags =  join(" ", sort keys $titem);
         $tags =~ s/inputline\s?//;
         printf "$line: $tags";
         if ( exists $titem->{'tags'} ) { print " (with ".@{$titem->{'tags'}}." tags)"; }
         print "\n";
 
-        if ( exists $titem->{'text'} )    { print "$spaces    text: $titem->{'text'}\n"; }
-#else { print "$spaces    text: <no task text found!>\n"; }
-        if ( exists $titem->{'qtext'} )   { print "$spaces   qtext: $titem->{'qtext'}\n"; }
-        if ( exists $titem->{'comment'} ) { print "$spaces comment: $titem->{'comment'}\n"; }
+        if ( exists $titem->{'text'} )    { print "    text: $titem->{'text'}\n"; }
+#else { print "    text: <no task text found!>\n"; }
+        if ( exists $titem->{'qtext'} )   { print "   qtext: $titem->{'qtext'}\n"; }
+        if ( exists $titem->{'comment'} ) { print " comment: $titem->{'comment'}\n"; }
 
         if ( exists $titem->{'tags'} ) {
             if (my @matched = grep( /\+/, @{$titem->{'tags'}}))
-            { print "$spaces    PROJ:"; printarray(\@matched); }
+            { print "    PROJ:"; printarray(\@matched); }
             if (my @matched = grep( /\#/, @{$titem->{'tags'}}))
-            { print "$spaces    TAGS:"; printarray(\@matched); }
+            { print "    TAGS:"; printarray(\@matched); }
             if (my @matched = grep( /\@/, @{$titem->{'tags'}}))
-            { print "$spaces    SCOP:"; printarray(\@matched); }
+            { print "    SCOP:"; printarray(\@matched); }
             if (my @matched = grep( /\!/, @{$titem->{'tags'}}))
-            { print "$spaces    PRIO:"; printarray(\@matched); }
+            { print "    PRIO:"; printarray(\@matched); }
             if (my @matched = grep( /\&/, @{$titem->{'tags'}}))
-            { print "$spaces    TYPE:"; printarray(\@matched); }
+            { print "    TYPE:"; printarray(\@matched); }
         }
     }
 }
